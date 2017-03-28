@@ -296,8 +296,8 @@ kable(means.d,digits = round(2))</code></pre>
 </tr>
 </tbody>
 </table>
-<pre class="r"><code>compareValues(reportedValue = .018, obtainedValue = .019)</code></pre>
-<pre><code>## [1] &quot;MINOR NUMERICAL ERROR. The reported value (0.018) and the obtained value (0.019) differed by 5.56%&quot;</code></pre>
+<pre class="r"><code>compareValues(reportedValue = 1.18, obtainedValue = 1.19)</code></pre>
+<pre><code>## [1] &quot;MINOR NUMERICAL ERROR. The reported value (1.18) and the obtained value (1.19) differed by 0.85%&quot;</code></pre>
 </div>
 <div id="inferential-statistics" class="section level3">
 <h3>Inferential statistics</h3>
@@ -315,7 +315,7 @@ kable(means.d,digits = round(2))</code></pre>
 ## data:  d$ASync_RHI_Index and d$Sync_RHI_Index
 ## V = 146.5, p-value = 0.01704
 ## alternative hypothesis: true location shift is not equal to 0</code></pre>
-<p>We are able to replicate the study findings that <strong>illusion ratings following the synchronous condition (Median(SD)=1.5(1.19)) are statistically greater than the central point of zero (Wilcoxon test: p&lt;0.001)</strong>, suggesting that the RHI manipulation worked. Our standard deviation value is off by a tenth of a point compared to the origial (1.19 compared to 1.18), constituting a difference of 5.56% which is classified as a minor numerical error. This difference may be due to rounding error on the part of the author or other differences in processing the data.</p>
+<p>We are able to replicate the study findings that <strong>illusion ratings following the synchronous condition (Median(SD)=1.5(1.19)) are statistically greater than the central point of zero (Wilcoxon test: p&lt;0.001)</strong>, suggesting that the RHI manipulation worked. Our standard deviation value is off by a tenth of a point compared to the origial (1.19 compared to 1.18), constituting a difference of 0.85% which is classified as a minor numerical error. This difference may be due to rounding error on the part of the author or other differences in processing the data.</p>
 <p>We also find that participants rate a statistically <strong>greater RHI after the synchronous condition (Median(SD) = 1.5(1.19)) compared to the asynchronous condition (median(SD) = 0.8(1.35); p = 0.017</strong>. <strong>Figure 3</strong></p>
 <pre class="r"><code>ggplot(tidy.d, aes(x=Condition, y= RHI_index_score, ymin = -3, ymax = 3)) +
   geom_boxplot(alpha=.7) +
@@ -364,7 +364,7 @@ kable(means.d,digits = round(2))</code></pre>
 ##  language (EN)                        
 ##  collate  en_US.UTF-8                 
 ##  tz       America/Los_Angeles         
-##  date     2017-03-27                  
+##  date     2017-03-28                  
 ## 
 ##  package    * version date      
 ##  assertthat   0.1     2013-12-06

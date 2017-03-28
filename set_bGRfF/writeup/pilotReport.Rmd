@@ -69,7 +69,7 @@ means.d <- tidy.d %>%
   summarise(Median_Score = median(RHI_index_score), sd = sd(RHI_index_score))
 kable(means.d,digits = round(2))
 
-compareValues(reportedValue = .018, obtainedValue = .019)
+compareValues(reportedValue = 1.18, obtainedValue = 1.19)
 ```
 
 ### Inferential statistics
@@ -79,7 +79,7 @@ wilcox.test(d$Sync_RHI_Index, alternative = "greater", mu=0)
 wilcox.test(d$ASync_RHI_Index, d$Sync_RHI_Index, paired = TRUE)
 ```
 
-We are able to replicate the study findings that **illusion ratings following the synchronous condition (Median(SD)=1.5(1.19)) are statistically greater than the central point of zero (Wilcoxon test: p<0.001)**, suggesting that the RHI manipulation worked. Our standard deviation value is off by a tenth of a point compared to the origial (1.19 compared to 1.18), constituting a difference of 5.56% which is classified as a minor numerical error. This difference may be due to rounding error on the part of the author or other differences in processing the data.
+We are able to replicate the study findings that **illusion ratings following the synchronous condition (Median(SD)=1.5(1.19)) are statistically greater than the central point of zero (Wilcoxon test: p<0.001)**, suggesting that the RHI manipulation worked. Our standard deviation value is off by a tenth of a point compared to the origial (1.19 compared to 1.18), constituting a difference of 0.85% which is classified as a minor numerical error. This difference may be due to rounding error on the part of the author or other differences in processing the data.
 
 We also find that participants rate a statistically **greater RHI after the synchronous condition (Median(SD) = 1.5(1.19)) compared to the asynchronous condition (median(SD) = 0.8(1.35); p = 0.017**. 
 **Figure 3**
