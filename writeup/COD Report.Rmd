@@ -1,0 +1,99 @@
+---
+title: "COD Reproducibility Report"
+output:
+  html_document:
+    toc: true
+    toc_float: true
+---
+
+#### Article ID: bGRfF
+#### Pilot: Catherine Thomas  
+#### Co-pilot: Tom Hardwicke  
+#### Start date: 03/27/2017
+#### End date: 03/27/2017  
+
+-------
+
+#### Methods summary: 
+Costantini et al. (2016) adds evidence on the link between multisensory integration and individual sensitivity to the rubber hand illusion (RHI), a method used to induce the feeling of body ownership of inanimate objects. They find that the greater an individual's temporal binding window, the greater temporal asynchrony an individual can tolerate in the rubber hand illusion. In this experiment, the authors attempted a new methodology for inducing the rubber hand illusion using a LED on the dorsal surface of the index finger of the rubber hand and a tactile stimulus attached to the dorsal surface of the index finger of the participant. 
+
+This study seeks to replicate the findings of Costantini et al. (2016) **Experiment 1 in Section 3.2 Rubber hand illusion - questionnaire** which assessed whether the RHI method succcessfully induced an illusion of body ownership. The authors used a 9-item questionnaire which asked about the subjective perception of feeling that the rubber hand was like one's own hand. The 9 items were assessed on a 7-point Likert scale ranging from -3 to +3 where -3 is "fully disagree" and +3 is "fully agree." From these items, a RHI index was computed by subtracting the mean score of the six control items (4-9) from the three illusion items (1-3). The illusion is considered successful if the mean rating of this index is statistically different from the neutral mark on the scale ("neither agree/disagree" response, score of 0).  
+
+------
+
+#### Target outcomes: 
+Using the Wilcoxon test, we assess whether the mean RHI index score in the synchronous condition is significantly greater than the central point, i.e. a score of 0, and whether the mean RHI index score is greater in the synchronous condition compared to the asynchronous condition. We aim to replicate the following results:
+
+> Data violated the assumptions for normality (Shapiro-Wilks, p < 0.05). Wilcoxon rank tests are reported. As we implemented a new procedure to induce the RHI, using a LED on the rubber hand and a mechanical tapper on the participants’ hand, we firstly tested whether such induction procedure was effective in producing a reliable illusion. To this aim we tested whether mean rating to illusion statements were significantly different from the "neither agree/disagree" response (i.e. central point in the Likert scale). Illusion ratings after synchronous stimulation (Median(SD): 1.5(1.18)) was significantly higher than the central point (Wilcoxon test: p < 0.001). Hence, we can safely infer that we induced the RHI. Importantly, when comparing the synchronous and the asynchronous conditions (i.e. 25% rate of perceive synchrony) we found that participants experienced a significantly stronger RHI following the synchronous (median(SD) = 1.5(1.18)) compared to the asynchronous condition (median(SD) = 0.8(1.35); z(35) = 2.38; p = 0.017; Monte Carlo simulation as implemented in SPSS v.20 [0.013 0.018], Fig. 3).
+
+------
+
+```{r global_options, include=FALSE}
+knitr::opts_chunk$set(echo=TRUE, warning=FALSE, message=FALSE)
+```
+
+## Step 1: Load packages
+
+```{r}
+library(tidyverse) # for data munging
+library(knitr) # for kable table formating
+library(haven) # import and export 'SPSS', 'Stata' and 'SAS' Files
+library(readxl) # import excel files
+library(CODreports) # custom report functions
+library(forcats)
+```
+
+## Step 2: Load data
+
+```{r}
+d <- read_csv("../data/mmc1.csv", col_names = TRUE, col_types = NULL, na = c("", "NA")) 
+```
+
+## Step 3: Tidy data
+
+```{r}
+tidy.d <- d %>%
+  select(Sync_RHI_Index, ASync_RHI_Index) %>%
+  gather(Sync_RHI_Index, ASync_RHI_Index, key=Condition, value=RHI_index_score) %>%
+  mutate(Condition = fct_recode(Condition, "Synchronous"="Sync_RHI_Index", "Asynchronous"="ASync_RHI_Index"))
+```
+
+## Step 4: Run analysis
+
+### Descriptive statistics
+
+```{r}
+means.d <- tidy.d %>%
+  group_by(Condition) %>%
+  summarise(Median_Score = median(RHI_index_score), sd = sd(RHI_index_score))
+kable(means.d,digits = round(2))
+```
+
+### Inferential statistics
+
+```{r}
+wilcox.test(d$Sync_RHI_Index, alternative = "greater", mu=0) 
+wilcox.test(d$ASync_RHI_Index, d$Sync_RHI_Index, paired = TRUE)
+```
+
+We are able to replicate the study findings that **illusion ratings following the synchronous condition (Median(SD)=1.5(1.19)) are statistically greater than the central point of zero (Wilcoxon test: p<0.001)**, suggesting that the RHI manipulation worked. Our standard deviation value is off by a tenth of a point compared to the origial, but we assume that this difference is due to rounding error on the part of the author or other differences in processing the data.
+
+We also find that participants rate a statistically **greater RHI after the synchronous condition (Median(SD) = 1.5(1.19)) compared to the asynchronous condition (median(SD) = 0.8(1.35); p = 0.017**. 
+**Figure 3**
+```{r graphs}
+ggplot(tidy.d, aes(x=Condition, y= RHI_index_score, ymin = -3, ymax = 3)) +
+  geom_boxplot(alpha=.7) +
+  geom_point() +
+  ylab("RHI Index") +
+  xlab("Condition") +
+  ggtitle("Fig. 3: RHI Index Distribution by Condition") +
+  theme_bw()
+```
+
+## Step 5: Conclusion
+
+This reproducibility check was a success. We found that the RHI manipulation successfully induced subjective ratings of illusion in the synchronous condition relative to no induction and that participants experienced greater feelings of illusion in the synchronous compared to non-synchronous condition as expected. 
+
+```{r session_info, include=TRUE, echo=TRUE, results='markup'}
+devtools::session_info()
+```
