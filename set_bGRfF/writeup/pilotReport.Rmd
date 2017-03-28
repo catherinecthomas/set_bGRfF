@@ -46,8 +46,9 @@ library(forcats)
 ## Step 2: Load data
 
 ```{r}
-d <- read_csv("../data/mmc1.csv", col_names = TRUE, col_types = NULL, na = c("", "NA")) 
+d <- read_csv("../data/data_manualClean.csv", col_names = TRUE, col_types = NULL, na = c("", "NA")) 
 ```
+The data was manually edited in Excel such that the column titles reflected the measurement (e.g. RHI Index) and condition (Synchronous vs. Asynchronous).
 
 ## Step 3: Tidy data
 
@@ -67,6 +68,8 @@ means.d <- tidy.d %>%
   group_by(Condition) %>%
   summarise(Median_Score = median(RHI_index_score), sd = sd(RHI_index_score))
 kable(means.d,digits = round(2))
+
+compareValues(reportedValue = .018, obtainedValue = .019)
 ```
 
 ### Inferential statistics
@@ -76,7 +79,7 @@ wilcox.test(d$Sync_RHI_Index, alternative = "greater", mu=0)
 wilcox.test(d$ASync_RHI_Index, d$Sync_RHI_Index, paired = TRUE)
 ```
 
-We are able to replicate the study findings that **illusion ratings following the synchronous condition (Median(SD)=1.5(1.19)) are statistically greater than the central point of zero (Wilcoxon test: p<0.001)**, suggesting that the RHI manipulation worked. Our standard deviation value is off by a tenth of a point compared to the origial, but we assume that this difference is due to rounding error on the part of the author or other differences in processing the data.
+We are able to replicate the study findings that **illusion ratings following the synchronous condition (Median(SD)=1.5(1.19)) are statistically greater than the central point of zero (Wilcoxon test: p<0.001)**, suggesting that the RHI manipulation worked. Our standard deviation value is off by a tenth of a point compared to the origial (1.19 compared to 1.18), constituting a difference of 5.56% which is classified as a minor numerical error. This difference may be due to rounding error on the part of the author or other differences in processing the data.
 
 We also find that participants rate a statistically **greater RHI after the synchronous condition (Median(SD) = 1.5(1.19)) compared to the asynchronous condition (median(SD) = 0.8(1.35); p = 0.017**. 
 **Figure 3**
@@ -92,7 +95,16 @@ ggplot(tidy.d, aes(x=Condition, y= RHI_index_score, ymin = -3, ymax = 3)) +
 
 ## Step 5: Conclusion
 
-This reproducibility check was a success. We found that the RHI manipulation successfully induced subjective ratings of illusion in the synchronous condition relative to no induction and that participants experienced greater feelings of illusion in the synchronous compared to non-synchronous condition as expected. 
+This reproducibility check was a success. We found that the RHI manipulation successfully induced subjective ratings of illusion in the synchronous condition relative to no induction and that participants experienced greater feelings of illusion in the synchronous compared to non-synchronous condition as expected. We only found a minor numerical error in the reporting of the standard deviation of the RHI index scores in the Synchronous condition.
+
+```{r}
+codReport(Report_Type = 'pilot',
+          Article_ID = 'bGRfF', 
+          Insufficient_Information_Errors = 0,
+          Decision_Errors = 0, 
+          Major_Numerical_Errors = 0, 
+          Minor_Numerical_Errors = 1)
+```
 
 ```{r session_info, include=TRUE, echo=TRUE, results='markup'}
 devtools::session_info()

@@ -257,7 +257,8 @@ library(forcats)</code></pre>
 </div>
 <div id="step-2-load-data" class="section level2">
 <h2>Step 2: Load data</h2>
-<pre class="r"><code>d &lt;- read_csv(&quot;../data/mmc1.csv&quot;, col_names = TRUE, col_types = NULL, na = c(&quot;&quot;, &quot;NA&quot;)) </code></pre>
+<pre class="r"><code>d &lt;- read_csv(&quot;../data/data_manualClean.csv&quot;, col_names = TRUE, col_types = NULL, na = c(&quot;&quot;, &quot;NA&quot;)) </code></pre>
+<p>The data was manually edited in Excel such that the column titles reflected the measurement (e.g. RHI Index) and condition (Synchronous vs. Asynchronous).</p>
 </div>
 <div id="step-3-tidy-data" class="section level2">
 <h2>Step 3: Tidy data</h2>
@@ -295,6 +296,8 @@ kable(means.d,digits = round(2))</code></pre>
 </tr>
 </tbody>
 </table>
+<pre class="r"><code>compareValues(reportedValue = .018, obtainedValue = .019)</code></pre>
+<pre><code>## [1] &quot;MINOR NUMERICAL ERROR. The reported value (0.018) and the obtained value (0.019) differed by 5.56%&quot;</code></pre>
 </div>
 <div id="inferential-statistics" class="section level3">
 <h3>Inferential statistics</h3>
@@ -312,7 +315,7 @@ kable(means.d,digits = round(2))</code></pre>
 ## data:  d$ASync_RHI_Index and d$Sync_RHI_Index
 ## V = 146.5, p-value = 0.01704
 ## alternative hypothesis: true location shift is not equal to 0</code></pre>
-<p>We are able to replicate the study findings that <strong>illusion ratings following the synchronous condition (Median(SD)=1.5(1.19)) are statistically greater than the central point of zero (Wilcoxon test: p&lt;0.001)</strong>, suggesting that the RHI manipulation worked. Our standard deviation value is off by a tenth of a point compared to the origial, but we assume that this difference is due to rounding error on the part of the author or other differences in processing the data.</p>
+<p>We are able to replicate the study findings that <strong>illusion ratings following the synchronous condition (Median(SD)=1.5(1.19)) are statistically greater than the central point of zero (Wilcoxon test: p&lt;0.001)</strong>, suggesting that the RHI manipulation worked. Our standard deviation value is off by a tenth of a point compared to the origial (1.19 compared to 1.18), constituting a difference of 5.56% which is classified as a minor numerical error. This difference may be due to rounding error on the part of the author or other differences in processing the data.</p>
 <p>We also find that participants rate a statistically <strong>greater RHI after the synchronous condition (Median(SD) = 1.5(1.19)) compared to the asynchronous condition (median(SD) = 0.8(1.35); p = 0.017</strong>. <strong>Figure 3</strong></p>
 <pre class="r"><code>ggplot(tidy.d, aes(x=Condition, y= RHI_index_score, ymin = -3, ymax = 3)) +
   geom_boxplot(alpha=.7) +
@@ -326,7 +329,33 @@ kable(means.d,digits = round(2))</code></pre>
 </div>
 <div id="step-5-conclusion" class="section level2">
 <h2>Step 5: Conclusion</h2>
-<p>This reproducibility check was a success. We found that the RHI manipulation successfully induced subjective ratings of illusion in the synchronous condition relative to no induction and that participants experienced greater feelings of illusion in the synchronous compared to non-synchronous condition as expected.</p>
+<p>This reproducibility check was a success. We found that the RHI manipulation successfully induced subjective ratings of illusion in the synchronous condition relative to no induction and that participants experienced greater feelings of illusion in the synchronous compared to non-synchronous condition as expected. We only found a minor numerical error in the reporting of the standard deviation of the RHI index scores in the Synchronous condition.</p>
+<pre class="r"><code>codReport(Report_Type = 'pilot',
+          Article_ID = 'bGRfF', 
+          Insufficient_Information_Errors = 0,
+          Decision_Errors = 0, 
+          Major_Numerical_Errors = 0, 
+          Minor_Numerical_Errors = 1)</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="right">Insufficient_Information_Errors</th>
+<th align="right">Decision_Errors</th>
+<th align="right">Major_Numerical_Errors</th>
+<th align="right">Minor_Numerical_Errors</th>
+<th align="left">Final_Outcome</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="left">Success</td>
+</tr>
+</tbody>
+</table>
 <pre class="r"><code>devtools::session_info()</code></pre>
 <pre><code>##  setting  value                       
 ##  version  R version 3.3.3 (2017-03-06)
